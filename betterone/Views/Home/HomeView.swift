@@ -31,7 +31,7 @@ struct HomeView: View {
             VStack(alignment: .leading, spacing: Theme.spacingLG) {
                 // Custom Header
                 HStack {
-                    Text("Home")
+                    Text("BetterMe")
                         .font(.largeTitle.bold())
                     
                     Spacer()

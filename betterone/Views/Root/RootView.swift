@@ -15,23 +15,26 @@ struct RootView: View {
 
 struct MainTabView: View {
     @Environment(AppState.self) private var appState
-    @State private var selectedTab = 0
 
     var body: some View {
+        @Bindable var appState = appState
         ZStack(alignment: .bottom) {
             Group {
-                switch selectedTab {
+                switch appState.selectedTab {
                 case 0:
                     CoachingNavigationView()
                 case 1:
+                    HistoryNavigationView()
+                case 2:
                     NavigationStack {
                         SettingsView()
                     }
-                case 2:
+                case 3:
                     NavigationStack {
-                        Text("Search")
-                            .font(.title)
-                            .navigationTitle("Search")
+                        SearchView()
+                            .navigationDestination(for: Topic.self) { topic in
+                                ChatView(topic: topic)
+                            }
                     }
                 default:
                     CoachingNavigationView()
@@ -47,21 +50,27 @@ struct MainTabView: View {
                         TabButton(
                             icon: "house.fill",
                             label: "Home",
-                            isSelected: selectedTab == 0
-                        ) { selectedTab = 0 }
+                            isSelected: appState.selectedTab == 0
+                        ) { appState.selectedTab = 0 }
+
+                        TabButton(
+                            icon: "clock.fill",
+                            label: "History",
+                            isSelected: appState.selectedTab == 1
+                        ) { appState.selectedTab = 1 }
 
                         TabButton(
                             icon: "gearshape.fill",
                             label: "Settings",
-                            isSelected: selectedTab == 1
-                        ) { selectedTab = 1 }
+                            isSelected: appState.selectedTab == 2
+                        ) { appState.selectedTab = 2 }
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
                     .glassEffect(.regular, in: .capsule)
 
                     // Circular search button — plain glass, content shows through
-                    Button { selectedTab = 2 } label: {
+                    Button { appState.selectedTab = 3 } label: {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundStyle(.primary)
@@ -104,6 +113,17 @@ struct TabButton: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: isSelected)
+    }
+}
+
+struct HistoryNavigationView: View {
+    var body: some View {
+        NavigationStack {
+            HistoryView()
+                .navigationDestination(for: ChatSession.self) { session in
+                    HistoryDetailView(session: session)
+                }
+        }
     }
 }
 

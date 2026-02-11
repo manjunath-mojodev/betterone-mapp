@@ -8,7 +8,7 @@ struct ChatInputView: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: Theme.spacingSM) {
             ZStack(alignment: .topLeading) {
-                GrowingTextView(text: $text, placeholder: "Type a message...")
+                GrowingTextView(text: $text, placeholder: "Type a message...", onSubmit: onSend)
                     .frame(minHeight: 36, maxHeight: 120)
                     .accessibilityLabel("Message input")
                     .accessibilityHint("Type your message to \(AppConstants.creatorName)")
@@ -40,6 +40,7 @@ struct ChatInputView: View {
 struct GrowingTextView: UIViewRepresentable {
     @Binding var text: String
     var placeholder: String
+    var onSubmit: (() -> Void)?
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -52,6 +53,7 @@ struct GrowingTextView: UIViewRepresentable {
         textView.backgroundColor = .clear
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
         textView.isScrollEnabled = true
+        textView.returnKeyType = .send
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 
         // Placeholder label
@@ -84,6 +86,14 @@ struct GrowingTextView: UIViewRepresentable {
 
         init(_ parent: GrowingTextView) {
             self.parent = parent
+        }
+
+        func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            if text == "\n" {
+                parent.onSubmit?()
+                return false
+            }
+            return true
         }
 
         func textViewDidChange(_ textView: UITextView) {

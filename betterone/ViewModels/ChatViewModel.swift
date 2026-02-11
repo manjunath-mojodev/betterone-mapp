@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+@MainActor
 @Observable
 final class ChatViewModel {
     let topic: Topic
@@ -114,7 +115,7 @@ final class ChatViewModel {
         let builder = makePromptBuilder(modelContext: modelContext, isFirstMessage: true)
         let llmMessages = builder.build()
 
-        streamResponse(
+        fetchResponse(
             llmMessages: llmMessages,
             llmService: llmService,
             modelContext: modelContext,
@@ -132,38 +133,30 @@ final class ChatViewModel {
             return
         }
 
-        // Run risk assessment before generating response
-        isStreaming = true
+        // Fast rule-based risk check (no API call)
+        let rules = fetchRules(modelContext: modelContext)
+        let assessor = RiskAssessor(rules: rules)
+        let ruleAssessment = assessor.assessRuleBased(userMessage: userMessage.content) ?? .safe
 
-        streamingTask = Task {
-            let rules = fetchRules(modelContext: modelContext)
-            let assessor = RiskAssessor(rules: rules)
-            let assessment = await assessor.assess(
-                userMessage: userMessage.content,
-                llmService: llmService
-            )
-
-            if assessment.isFlagged {
-                userMessage.riskFlagged = true
-            }
-
-            let builder = makePromptBuilder(
-                modelContext: modelContext,
-                isFirstMessage: false,
-                riskAssessment: assessment
-            )
-            var llmMessages = builder.build()
-            llmMessages.append(LLMMessage(role: "user", content: userMessage.content))
-
-            // Continue streaming on the main flow
-            await streamResponseAsync(
-                llmMessages: llmMessages,
-                llmService: llmService,
-                modelContext: modelContext,
-                riskAssessment: assessment,
-                userMessage: userMessage
-            )
+        if ruleAssessment.isFlagged {
+            userMessage.riskFlagged = true
         }
+
+        let builder = makePromptBuilder(
+            modelContext: modelContext,
+            isFirstMessage: false,
+            riskAssessment: ruleAssessment
+        )
+        var llmMessages = builder.build()
+        llmMessages.append(LLMMessage(role: "user", content: userMessage.content))
+
+        fetchResponse(
+            llmMessages: llmMessages,
+            llmService: llmService,
+            modelContext: modelContext,
+            riskAssessment: ruleAssessment,
+            userMessage: userMessage
+        )
     }
 
     private func generateWrapUp(modelContext: ModelContext, llmService: LLMService) {
@@ -184,7 +177,10 @@ final class ChatViewModel {
                 let conversationSummary = messages.map { "\($0.role): \($0.content)" }.joined(separator: "\n")
                 wrapUpMessages.append(LLMMessage(role: "user", content: "Here is the conversation:\n\n\(conversationSummary)"))
 
-                let response = try await llmService.complete(messages: wrapUpMessages)
+                let capturedMessages = wrapUpMessages
+                let response = try await Task.detached(priority: .userInitiated) {
+                    try await llmService.complete(messages: capturedMessages)
+                }.value
                 parseWrapUp(response)
 
                 session?.takeaway = sessionTakeaway
@@ -202,91 +198,58 @@ final class ChatViewModel {
         }
     }
 
-    // MARK: - Streaming
+    // MARK: - LLM Response
 
-    private func streamResponse(
+    private func fetchResponse(
         llmMessages: [LLMMessage],
         llmService: LLMService,
         modelContext: ModelContext,
         riskAssessment: RiskAssessment?,
         userMessage: ChatMessage?
     ) {
+        streamingTask?.cancel()
         isStreaming = true
         errorMessage = nil
 
-        let assistantMessage = ChatMessage(role: "assistant", content: "")
-        assistantMessage.session = session
-        modelContext.insert(assistantMessage)
-        messages.append(assistantMessage)
+        print("🟡 [Chat] fetchResponse called with \(llmMessages.count) messages")
 
         streamingTask = Task {
-            do {
-                var accumulated = ""
-                for try await chunk in llmService.stream(messages: llmMessages) {
-                    if Task.isCancelled { break }
-                    accumulated += chunk
-                    assistantMessage.content = accumulated
-                }
+            print("🟡 [Chat] Task started")
 
-                // Log guardrail event after response completes
+            let assistantMessage = ChatMessage(role: "assistant", content: "")
+            assistantMessage.session = session
+            modelContext.insert(assistantMessage)
+            messages.append(assistantMessage)
+
+            do {
+                print("🟡 [Chat] calling llmService.complete() via detached task...")
+                // Run the network call in a detached context to avoid MainActor scheduling issues
+                let capturedMessages = llmMessages
+                let response = try await Task.detached(priority: .userInitiated) {
+                    try await llmService.complete(messages: capturedMessages)
+                }.value
+                print("🟢 [Chat] got response: \(response.prefix(80))...")
+                assistantMessage.content = response
+
                 if let assessment = riskAssessment, assessment.isFlagged {
                     logGuardrailEvent(
                         assessment: assessment,
                         userMessage: userMessage,
-                        assistantResponse: accumulated,
+                        assistantResponse: response,
                         modelContext: modelContext
                     )
                 }
-
-                isStreaming = false
             } catch {
-                if !Task.isCancelled {
-                    assistantMessage.content = assistantMessage.content + "\n\n(Response interrupted: \(error.localizedDescription))"
-                    errorMessage = error.localizedDescription
-                    isStreaming = false
-                }
-            }
-        }
-    }
-
-    private func streamResponseAsync(
-        llmMessages: [LLMMessage],
-        llmService: LLMService,
-        modelContext: ModelContext,
-        riskAssessment: RiskAssessment?,
-        userMessage: ChatMessage?
-    ) async {
-        errorMessage = nil
-
-        let assistantMessage = ChatMessage(role: "assistant", content: "")
-        assistantMessage.session = session
-        modelContext.insert(assistantMessage)
-        messages.append(assistantMessage)
-
-        do {
-            var accumulated = ""
-            for try await chunk in llmService.stream(messages: llmMessages) {
-                if Task.isCancelled { break }
-                accumulated += chunk
-                assistantMessage.content = accumulated
-            }
-
-            if let assessment = riskAssessment, assessment.isFlagged {
-                logGuardrailEvent(
-                    assessment: assessment,
-                    userMessage: userMessage,
-                    assistantResponse: accumulated,
-                    modelContext: modelContext
-                )
-            }
-
-            isStreaming = false
-        } catch {
-            if !Task.isCancelled {
-                assistantMessage.content = assistantMessage.content + "\n\n(Response interrupted: \(error.localizedDescription))"
+                print("🔴 [Chat] error: \(error)")
+                // Remove the failed assistant message so error text doesn't
+                // pollute conversation history sent to the LLM on the next call.
+                messages.removeAll { $0.id == assistantMessage.id }
+                modelContext.delete(assistantMessage)
                 errorMessage = error.localizedDescription
-                isStreaming = false
             }
+
+            print("🟡 [Chat] setting isStreaming = false")
+            isStreaming = false
         }
     }
 

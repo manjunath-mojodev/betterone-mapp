@@ -44,7 +44,6 @@ struct ChatView: View {
                             .background(.white.opacity(0.2))
                             .clipShape(Circle())
                     }
-                    .disabled(viewModel.isStreaming)
                     .accessibilityLabel("End session")
                     .accessibilityHint("End this coaching session")
                 }
@@ -113,7 +112,7 @@ struct ChatView: View {
             if viewModel.hasSelectedIntent {
                 ChatInputView(
                     text: $viewModel.inputText,
-                    isDisabled: viewModel.isStreaming
+                    isDisabled: false
                 ) {
                     viewModel.sendMessage(modelContext: modelContext, llmService: llmService)
                 }
@@ -140,6 +139,7 @@ struct ChatView: View {
                 nextStep: viewModel.sessionNextStep
             ) {
                 viewModel.showWrapUp = false
+                appState.selectedTab = 0
                 dismiss()
             }
             .presentationDetents([.medium])

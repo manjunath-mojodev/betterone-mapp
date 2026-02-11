@@ -6,6 +6,7 @@ final class AppState {
         didSet { UserDefaults.standard.set(onboardingComplete, forKey: "onboardingComplete") }
     }
     var showTabBar: Bool = true
+    var selectedTab: Int = 0
 
     init() {
         self.onboardingComplete = UserDefaults.standard.bool(forKey: "onboardingComplete")

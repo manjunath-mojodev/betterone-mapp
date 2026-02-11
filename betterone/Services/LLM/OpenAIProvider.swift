@@ -17,11 +17,11 @@ struct OpenAIProvider: LLMProvider {
 
     func streamMessage(messages: [LLMMessage], config: LLMConfiguration) -> AsyncThrowingStream<String, Error> {
         AsyncThrowingStream { continuation in
-            let task = Task {
+            let task = Task.detached { [self] in
                 do {
-                    let request = try buildRequest(messages: messages, config: config, stream: true)
+                    let request = try self.buildRequest(messages: messages, config: config, stream: true)
                     let (bytes, response) = try await URLSession.shared.bytes(for: request)
-                    try validateResponse(response, data: nil)
+                    try self.validateResponse(response, data: nil)
 
                     for try await line in bytes.lines {
                         if Task.isCancelled { break }
