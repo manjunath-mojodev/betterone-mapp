@@ -4,3 +4,5 @@
 
 // LLM API Key (required) — obtain from your provider's console
 LLM_API_KEY = YOUR_API_KEY_HERE
+REVENUECAT_DEV_API_KEY = YOUR_DEV_API_KEY_HERE
+REVENUECAT_PROD_API_KEY = YOUR_PROD_API_KEY_HERE

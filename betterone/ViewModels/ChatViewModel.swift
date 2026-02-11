@@ -16,6 +16,8 @@ final class ChatViewModel {
 
     private var session: ChatSession?
     private var streamingTask: Task<Void, Never>?
+    private var activeURLTask: URLSessionTask?
+    private var requestGeneration: Int = 0
 
     let greeting: String
 
@@ -86,6 +88,7 @@ final class ChatViewModel {
     }
 
     func endSession(modelContext: ModelContext, llmService: LLMService) {
+        activeURLTask?.cancel()
         streamingTask?.cancel()
         session?.endedAt = Date()
 
@@ -169,31 +172,31 @@ final class ChatViewModel {
             return
         }
 
+        let provider = Self.makeProvider(for: llmService.configuration)
+        let config = llmService.configuration
+
+        var wrapUpMessages = [LLMMessage(role: "system", content: PromptTemplates.wrapUpInstruction)]
+        let conversationSummary = messages.map { "\($0.role): \($0.content)" }.joined(separator: "\n")
+        wrapUpMessages.append(LLMMessage(role: "user", content: "Here is the conversation:\n\n\(conversationSummary)"))
+
         isStreaming = true
 
-        streamingTask = Task {
-            do {
-                var wrapUpMessages = [LLMMessage(role: "system", content: PromptTemplates.wrapUpInstruction)]
-                let conversationSummary = messages.map { "\($0.role): \($0.content)" }.joined(separator: "\n")
-                wrapUpMessages.append(LLMMessage(role: "user", content: "Here is the conversation:\n\n\(conversationSummary)"))
-
-                let capturedMessages = wrapUpMessages
-                let response = try await Task.detached(priority: .userInitiated) {
-                    try await llmService.complete(messages: capturedMessages)
-                }.value
-                parseWrapUp(response)
-
-                session?.takeaway = sessionTakeaway
-                session?.nextStep = sessionNextStep
-                isStreaming = false
-                showWrapUp = true
-            } catch {
-                isStreaming = false
-                sessionTakeaway = "You showed up and did the work today."
-                sessionNextStep = "Take one small step from what we discussed."
-                session?.takeaway = sessionTakeaway
-                session?.nextStep = sessionNextStep
-                showWrapUp = true
+        activeURLTask = provider.send(messages: wrapUpMessages, config: config) { [weak self] result in
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                switch result {
+                case .success(let response):
+                    self.parseWrapUp(response)
+                    self.session?.takeaway = self.sessionTakeaway
+                    self.session?.nextStep = self.sessionNextStep
+                case .failure:
+                    self.sessionTakeaway = "You showed up and did the work today."
+                    self.sessionNextStep = "Take one small step from what we discussed."
+                    self.session?.takeaway = self.sessionTakeaway
+                    self.session?.nextStep = self.sessionNextStep
+                }
+                self.isStreaming = false
+                self.showWrapUp = true
             }
         }
     }
@@ -207,49 +210,62 @@ final class ChatViewModel {
         riskAssessment: RiskAssessment?,
         userMessage: ChatMessage?
     ) {
+        // Cancel any in-flight network request immediately
+        activeURLTask?.cancel()
         streamingTask?.cancel()
+
         isStreaming = true
         errorMessage = nil
 
-        print("🟡 [Chat] fetchResponse called with \(llmMessages.count) messages")
+        // Generation counter: stale callbacks check this and bail out
+        requestGeneration += 1
+        let myGeneration = requestGeneration
 
-        streamingTask = Task {
-            print("🟡 [Chat] Task started")
+        // Capture @Observable properties synchronously on MainActor
+        let provider = Self.makeProvider(for: llmService.configuration)
+        let config = llmService.configuration
+        let currentSession = session
 
-            let assistantMessage = ChatMessage(role: "assistant", content: "")
-            assistantMessage.session = session
-            modelContext.insert(assistantMessage)
-            messages.append(assistantMessage)
+        print("🟡 [Chat] fetchResponse gen=\(myGeneration) with \(llmMessages.count) messages")
 
-            do {
-                print("🟡 [Chat] calling llmService.complete() via detached task...")
-                // Run the network call in a detached context to avoid MainActor scheduling issues
-                let capturedMessages = llmMessages
-                let response = try await Task.detached(priority: .userInitiated) {
-                    try await llmService.complete(messages: capturedMessages)
-                }.value
-                print("🟢 [Chat] got response: \(response.prefix(80))...")
-                assistantMessage.content = response
+        // Pure URLSession callback — NO Swift Tasks for the network call.
+        // The callback runs on URLSession's background queue, then we dispatch to MainActor.
+        activeURLTask = provider.send(messages: llmMessages, config: config) { [weak self] result in
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.requestGeneration == myGeneration else { return }
 
-                if let assessment = riskAssessment, assessment.isFlagged {
-                    logGuardrailEvent(
-                        assessment: assessment,
-                        userMessage: userMessage,
-                        assistantResponse: response,
-                        modelContext: modelContext
-                    )
+                switch result {
+                case .success(let response):
+                    print("🟢 [Chat] gen=\(myGeneration) got response: \(response.prefix(80))...")
+                    let assistantMessage = ChatMessage(role: "assistant", content: response)
+                    assistantMessage.session = currentSession
+                    modelContext.insert(assistantMessage)
+                    self.messages.append(assistantMessage)
+
+                    if let assessment = riskAssessment, assessment.isFlagged {
+                        self.logGuardrailEvent(
+                            assessment: assessment,
+                            userMessage: userMessage,
+                            assistantResponse: response,
+                            modelContext: modelContext
+                        )
+                    }
+
+                case .failure(let error):
+                    print("🔴 [Chat] gen=\(myGeneration) error: \(error)")
+                    self.errorMessage = String(error.localizedDescription.prefix(150))
                 }
-            } catch {
-                print("🔴 [Chat] error: \(error)")
-                // Remove the failed assistant message so error text doesn't
-                // pollute conversation history sent to the LLM on the next call.
-                messages.removeAll { $0.id == assistantMessage.id }
-                modelContext.delete(assistantMessage)
-                errorMessage = error.localizedDescription
-            }
 
-            print("🟡 [Chat] setting isStreaming = false")
-            isStreaming = false
+                self.isStreaming = false
+            }
+        }
+    }
+
+    private static func makeProvider(for config: LLMConfiguration) -> any LLMProvider {
+        switch config.provider {
+        case .openai: OpenAIProvider()
+        case .claude: ClaudeProvider()
+        case .gemini: GeminiProvider()
         }
     }
 

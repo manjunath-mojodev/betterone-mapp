@@ -5,62 +5,81 @@ struct GeminiProvider: LLMProvider {
     private let baseURL = "https://generativelanguage.googleapis.com/v1beta/models"
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "betterone", category: "GeminiProvider")
 
-    private static let maxRetries = 3
-    private static let retryDelays: [UInt64] = [2_000_000_000, 4_000_000_000, 8_000_000_000] // 2s, 4s, 8s
-    private static let requestTimeoutSeconds: UInt64 = 30
-
     func sendMessage(messages: [LLMMessage], config: LLMConfiguration) async throws -> String {
         let request = try buildRequest(messages: messages, config: config, stream: false)
         Self.logger.info("➡️ \(request.httpMethod ?? "?") \(Self.redactedURL(request.url))")
         Self.logRequestBody(request)
 
-        for attempt in 0..<Self.maxRetries {
-            print("🔵 [Gemini] sendMessage attempt \(attempt + 1)/\(Self.maxRetries)")
+        print("🔵 [Gemini] sendMessage: starting request")
+        let (data, response) = try await URLSession.shared.data(for: request)
 
-            let (data, response) = try await Self.performRequest(request)
+        print("🔵 [Gemini] got response: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
+        Self.logResponse(response, data: data)
 
-            print("🔵 [Gemini] got response: \((response as? HTTPURLResponse)?.statusCode ?? -1)")
-            Self.logResponse(response, data: data)
+        try validateResponse(response, data: data)
 
-            if let http = response as? HTTPURLResponse, http.statusCode == 429 {
-                Self.logger.warning("⏳ Rate limited (attempt \(attempt + 1)/\(Self.maxRetries)), retrying...")
-                try await Task.sleep(nanoseconds: Self.retryDelays[attempt])
-                continue
-            }
-
-            try validateResponse(response, data: data)
-
-            let result = try JSONDecoder().decode(GeminiResponse.self, from: data)
-            guard let text = result.candidates?.first?.content.parts.first?.text else {
-                throw LLMError.invalidResponse
-            }
-            return text
+        let result = try JSONDecoder().decode(GeminiResponse.self, from: data)
+        guard let text = result.candidates?.first?.content.parts.first?.text else {
+            throw LLMError.invalidResponse
         }
-
-        throw LLMError.apiError(statusCode: 429, message: "Rate limited after \(Self.maxRetries) retries")
+        return text
     }
 
-    /// Runs the network request in a fully detached context (off MainActor) with a hard timeout.
-    private static func performRequest(_ request: URLRequest) async throws -> (Data, URLResponse) {
-        print("🔵 [Gemini] performRequest: starting detached network call")
-        return try await withThrowingTaskGroup(of: (Data, URLResponse).self) { group in
-            group.addTask {
-                print("🔵 [Gemini] performRequest: URLSession.data starting")
-                let result = try await URLSession.shared.data(for: request)
-                print("🔵 [Gemini] performRequest: URLSession.data completed")
-                return result
-            }
-            group.addTask {
-                try await Task.sleep(nanoseconds: requestTimeoutSeconds * 1_000_000_000)
-                print("🔴 [Gemini] performRequest: timeout after \(requestTimeoutSeconds)s")
-                throw URLError(.timedOut)
-            }
-            guard let result = try await group.next() else {
-                throw URLError(.timedOut)
-            }
-            group.cancelAll()
-            return result
+    /// Callback-based send — zero Swift concurrency, zero Tasks, pure URLSession.
+    @discardableResult
+    func send(messages: [LLMMessage], config: LLMConfiguration,
+              completion: @escaping @Sendable (Result<String, Error>) -> Void) -> URLSessionTask? {
+        let request: URLRequest
+        do {
+            request = try buildRequest(messages: messages, config: config, stream: false)
+        } catch {
+            completion(.failure(error))
+            return nil
         }
+
+        Self.logger.info("➡️ CB \(request.httpMethod ?? "?") \(Self.redactedURL(request.url))")
+        print("🔵 [Gemini] callback send: starting dataTask")
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error {
+                print("🔴 [Gemini] callback send: network error")
+                completion(.failure(LLMError.networkError(error)))
+                return
+            }
+            guard let data, let response else {
+                completion(.failure(LLMError.invalidResponse))
+                return
+            }
+
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+            print("🔵 [Gemini] callback send: got \(statusCode)")
+
+            // Validate
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                let msg: String
+                if statusCode == 429 {
+                    msg = "Rate limited — please wait a moment and try again."
+                } else {
+                    msg = String((String(data: data, encoding: .utf8) ?? "Unknown error").prefix(200))
+                }
+                completion(.failure(LLMError.apiError(statusCode: statusCode, message: msg)))
+                return
+            }
+
+            // Decode
+            do {
+                let result = try JSONDecoder().decode(GeminiResponse.self, from: data)
+                guard let text = result.candidates?.first?.content.parts.first?.text else {
+                    completion(.failure(LLMError.invalidResponse))
+                    return
+                }
+                completion(.success(text))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+        task.resume()
+        return task
     }
 
     func streamMessage(messages: [LLMMessage], config: LLMConfiguration) -> AsyncThrowingStream<String, Error> {
@@ -71,39 +90,23 @@ struct GeminiProvider: LLMProvider {
                     Self.logger.info("➡️ STREAM \(request.httpMethod ?? "?") \(Self.redactedURL(request.url))")
                     Self.logRequestBody(request)
 
-                    var lastResponse: URLResponse?
-                    for attempt in 0..<Self.maxRetries {
-                        let (bytes, response) = try await URLSession.shared.bytes(for: request)
-                        lastResponse = response
+                    let (bytes, response) = try await URLSession.shared.bytes(for: request)
+                    Self.logResponse(response, data: nil)
+                    try self.validateResponse(response, data: nil)
 
-                        if let http = response as? HTTPURLResponse, http.statusCode == 429 {
-                            Self.logger.warning("⏳ Stream rate limited (attempt \(attempt + 1)/\(Self.maxRetries)), retrying...")
-                            try await Task.sleep(nanoseconds: Self.retryDelays[attempt])
-                            continue
-                        }
+                    for try await line in bytes.lines {
+                        if Task.isCancelled { break }
 
-                        Self.logResponse(response, data: nil)
-                        try self.validateResponse(response, data: nil)
+                        guard line.hasPrefix("data: ") else { continue }
+                        let payload = String(line.dropFirst(6))
 
-                        for try await line in bytes.lines {
-                            if Task.isCancelled { break }
+                        guard let data = payload.data(using: .utf8),
+                              let chunk = try? JSONDecoder().decode(GeminiResponse.self, from: data),
+                              let text = chunk.candidates?.first?.content.parts.first?.text else { continue }
 
-                            guard line.hasPrefix("data: ") else { continue }
-                            let payload = String(line.dropFirst(6))
-
-                            guard let data = payload.data(using: .utf8),
-                                  let chunk = try? JSONDecoder().decode(GeminiResponse.self, from: data),
-                                  let text = chunk.candidates?.first?.content.parts.first?.text else { continue }
-
-                            continuation.yield(text)
-                        }
-                        continuation.finish()
-                        return
+                        continuation.yield(text)
                     }
-
-                    // All retries exhausted
-                    let code = (lastResponse as? HTTPURLResponse)?.statusCode ?? 429
-                    continuation.finish(throwing: LLMError.apiError(statusCode: code, message: "Rate limited after \(Self.maxRetries) retries"))
+                    continuation.finish()
                 } catch {
                     Self.logger.error("❌ Stream error: \(error.localizedDescription)")
                     continuation.finish(throwing: error)
@@ -126,7 +129,7 @@ struct GeminiProvider: LLMProvider {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 60
+        request.timeoutInterval = 30
 
         // Gemini: system instruction is separate, messages use "user"/"model" roles
         let systemMessage = messages.first(where: { $0.role == "system" })
@@ -193,7 +196,14 @@ struct GeminiProvider: LLMProvider {
             throw LLMError.invalidResponse
         }
         guard (200...299).contains(httpResponse.statusCode) else {
-            let message = data.flatMap { String(data: $0, encoding: .utf8) } ?? "Unknown error"
+            let raw = data.flatMap { String(data: $0, encoding: .utf8) } ?? "Unknown error"
+            // Extract a short error message for the UI
+            let message: String
+            if httpResponse.statusCode == 429 {
+                message = "Rate limited — please wait a moment and try again."
+            } else {
+                message = String(raw.prefix(200))
+            }
             throw LLMError.apiError(statusCode: httpResponse.statusCode, message: message)
         }
     }
