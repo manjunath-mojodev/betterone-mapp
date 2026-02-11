@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6C0CC1E02F3C48CB00363BB0 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		6C0CC0BB2F38A87000363BB0 /* betterone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = betterone.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -34,6 +39,7 @@
 			children = (
 				6C0CC0BD2F38A87000363BB0 /* betterone */,
 				6C0CC0BC2F38A87000363BB0 /* Products */,
+				6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,6 +58,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6C0CC0C82F38A87100363BB0 /* Build configuration list for PBXNativeTarget "betterone" */;
 			buildPhases = (
+				6C0CC1FF2F3C500000363BB0 /* Generate Secrets */,
 				6C0CC0B72F38A87000363BB0 /* Sources */,
 				6C0CC0B82F38A87000363BB0 /* Frameworks */,
 				6C0CC0B92F38A87000363BB0 /* Resources */,
@@ -109,10 +116,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C0CC1E02F3C48CB00363BB0 /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6C0CC1FF2F3C500000363BB0 /* Generate Secrets */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Secrets";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/betterone/App/Secrets.generated.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cat > \"${SRCROOT}/betterone/App/Secrets.generated.swift\" <<EOF\n// Auto-generated at build time — do NOT edit or commit.\nimport Foundation\n\nenum Secrets {\n    static let llmAPIKey = \"${LLM_API_KEY}\"\n}\nEOF\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6C0CC0B72F38A87000363BB0 /* Sources */ = {
@@ -127,6 +158,7 @@
 /* Begin XCBuildConfiguration section */
 		6C0CC0C62F38A87100363BB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -191,6 +223,7 @@
 		};
 		6C0CC0C72F38A87100363BB0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -248,6 +281,7 @@
 		};
 		6C0CC0C92F38A87100363BB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -259,8 +293,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -280,6 +314,7 @@
 		};
 		6C0CC0CA2F38A87100363BB0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -291,8 +326,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

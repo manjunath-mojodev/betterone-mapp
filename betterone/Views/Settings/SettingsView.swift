@@ -36,23 +36,19 @@ struct SettingsView: View {
                 }
             }
 
-            Section("Creator") {
-                NavigationLink {
-                    CreatorModeGateView()
-                } label: {
-                    Label("Creator Mode", systemImage: "lock.shield")
-                }
-            }
-
-
-            
             Section("Development") {
+                NavigationLink {
+                    CreatorModeView(viewModel: CreatorModeViewModel(isAuthenticated: true))
+                } label: {
+                    Label("Creator Mode", systemImage: "hammer")
+                }
+
                 Button(role: .destructive) {
                     showResetConfirmation = true
                 } label: {
                     Label("Reset Onboarding", systemImage: "arrow.counterclockwise")
                 }
-                
+
                 Button(role: .destructive) {
                     hardReset()
                 } label: {

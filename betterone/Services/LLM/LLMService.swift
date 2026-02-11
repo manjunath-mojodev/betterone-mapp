@@ -41,10 +41,7 @@ final class LLMService {
     }
 
     private static func loadConfiguration() -> LLMConfiguration {
-        guard let data = UserDefaults.standard.data(forKey: "llmConfiguration"),
-              let config = try? JSONDecoder().decode(LLMConfiguration.self, from: data) else {
-            return .defaultOpenAI
-        }
-        return config
+        // Always use bundled config — provider settings are not user-editable.
+        return .bundledDefault
     }
 }

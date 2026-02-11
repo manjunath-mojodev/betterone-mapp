@@ -13,22 +13,46 @@ struct LLMConfiguration: Codable, Sendable {
     var temperature: Double
     var maxTokens: Int
 
-    private static var defaultAPIKey: String {
-        Bundle.main.object(forInfoDictionaryKey: "LLM_API_KEY") as? String ?? ""
+    private static var bundledConfig: [String: Any]? {
+        guard let url = Bundle.main.url(forResource: "LLMConfig", withExtension: "plist"),
+              let data = try? Data(contentsOf: url),
+              let dict = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+        else { return nil }
+        return dict
+    }
+
+    static var bundledAPIKey: String {
+        Secrets.llmAPIKey
+    }
+
+    static var bundledProvider: Provider {
+        if let raw = bundledConfig?["LLM_PROVIDER"] as? String,
+           let provider = Provider(rawValue: raw) {
+            return provider
+        }
+        return .openai
     }
 
     static let defaultOpenAI = LLMConfiguration(
-        provider: .openai, apiKey: defaultAPIKey, model: "gpt-4o",
+        provider: .openai, apiKey: bundledAPIKey, model: "gpt-4o",
         temperature: 0.7, maxTokens: 1024
     )
 
     static let defaultClaude = LLMConfiguration(
-        provider: .claude, apiKey: defaultAPIKey, model: "claude-sonnet-4-20250514",
+        provider: .claude, apiKey: bundledAPIKey, model: "claude-sonnet-4-20250514",
         temperature: 0.7, maxTokens: 1024
     )
 
     static let defaultGemini = LLMConfiguration(
-        provider: .gemini, apiKey: defaultAPIKey, model: "gemini-flash-latest",
+        provider: .gemini, apiKey: bundledAPIKey, model: "gemini-flash-latest",
         temperature: 0.7, maxTokens: 1024
     )
+
+    static var bundledDefault: LLMConfiguration {
+        switch bundledProvider {
+        case .openai: return defaultOpenAI
+        case .claude: return defaultClaude
+        case .gemini: return defaultGemini
+        }
+    }
 }

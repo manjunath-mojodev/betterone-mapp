@@ -1,11 +1,17 @@
 import Foundation
+import os.log
 
 struct GeminiProvider: LLMProvider {
     private let baseURL = "https://generativelanguage.googleapis.com/v1beta/models"
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "betterone", category: "GeminiProvider")
 
     func sendMessage(messages: [LLMMessage], config: LLMConfiguration) async throws -> String {
         let request = try buildRequest(messages: messages, config: config, stream: false)
+        Self.logger.info("➡️ \(request.httpMethod ?? "?") \(Self.redactedURL(request.url))")
+        Self.logRequestBody(request)
+
         let (data, response) = try await URLSession.shared.data(for: request)
+        Self.logResponse(response, data: data)
         try validateResponse(response, data: data)
 
         let result = try JSONDecoder().decode(GeminiResponse.self, from: data)
@@ -20,7 +26,11 @@ struct GeminiProvider: LLMProvider {
             let task = Task {
                 do {
                     let request = try buildRequest(messages: messages, config: config, stream: true)
+                    Self.logger.info("➡️ STREAM \(request.httpMethod ?? "?") \(Self.redactedURL(request.url))")
+                    Self.logRequestBody(request)
+
                     let (bytes, response) = try await URLSession.shared.bytes(for: request)
+                    Self.logResponse(response, data: nil)
                     try validateResponse(response, data: nil)
 
                     for try await line in bytes.lines {
@@ -37,6 +47,7 @@ struct GeminiProvider: LLMProvider {
                     }
                     continuation.finish()
                 } catch {
+                    Self.logger.error("❌ Stream error: \(error.localizedDescription)")
                     continuation.finish(throwing: error)
                 }
             }
@@ -79,6 +90,35 @@ struct GeminiProvider: LLMProvider {
 
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
         return request
+    }
+
+    private static func redactedURL(_ url: URL?) -> String {
+        guard let url else { return "<nil>" }
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return url.absoluteString
+        }
+        let redacted = components.queryItems?.map { item in
+            item.name == "key" ? URLQueryItem(name: "key", value: "***") : item
+        }
+        components.queryItems = redacted
+        return components.string ?? url.absoluteString
+    }
+
+    private static func logRequestBody(_ request: URLRequest) {
+        guard let body = request.httpBody,
+              let json = String(data: body, encoding: .utf8) else { return }
+        logger.debug("📤 Request body: \(json)")
+    }
+
+    private static func logResponse(_ response: URLResponse, data: Data?) {
+        guard let http = response as? HTTPURLResponse else { return }
+        let status = http.statusCode
+        let bodyPreview = data.flatMap({ String(data: $0.prefix(2048), encoding: .utf8) }) ?? "<stream>"
+        if (200...299).contains(status) {
+            logger.info("✅ Response \(status)")
+        } else {
+            logger.error("❌ Response \(status): \(bodyPreview)")
+        }
     }
 
     nonisolated private func validateResponse(_ response: URLResponse, data: Data?) throws {

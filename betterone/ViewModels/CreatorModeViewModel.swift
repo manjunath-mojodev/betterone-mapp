@@ -7,12 +7,9 @@ final class CreatorModeViewModel {
     var rules: [Rule] = []
     var guardrailLogs: [GuardrailLog] = []
     var isAuthenticated: Bool = false
-    var passcodeInput: String = ""
 
-    func authenticate() -> Bool {
-        let success = passcodeInput == AppConstants.creatorModePasscode
-        isAuthenticated = success
-        return success
+    init(isAuthenticated: Bool = false) {
+        self.isAuthenticated = isAuthenticated
     }
 
     func loadData(modelContext: ModelContext) {

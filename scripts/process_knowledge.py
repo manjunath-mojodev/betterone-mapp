@@ -333,7 +333,7 @@ TEXT:
 {truncated}
 
 Respond in this exact format (each field on its own line):
-CORE_IDEA: <one sentence summarizing the main coaching insight>
+CORE_IDEA: <one sentence summarizing the main coaching coaching insight>
 WHEN_TO_USE: <when a coach should apply this idea>
 HEURISTICS: <2-3 practical guidelines, separated by |>
 WHAT_TO_AVOID: <1-2 things to avoid, separated by |>

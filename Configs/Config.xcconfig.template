@@ -1,0 +1,6 @@
+// BetterOne Configuration Template
+// Copy this file to Config.xcconfig and fill in your values.
+// Config.xcconfig is gitignored and should never be committed.
+
+// LLM API Key (required) — obtain from your provider's console
+LLM_API_KEY = YOUR_API_KEY_HERE

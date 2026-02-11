@@ -17,4 +17,9 @@
 
 # Local Config
 Configs/Config.xcconfig
+Config.xcconfig
+
+# Generated secrets (build-time from xcconfig)
+betterone/App/Secrets.generated.swift
+
 build/
