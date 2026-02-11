@@ -1,0 +1,20 @@
+# Xcode
+.DS_Store
+*/build/
+*.projects
+*.xcodeproj/project.xcworkspace
+*.xcodeproj/xcuserdata
+*.xccheckout
+*.moved-aside
+*.derivedData
+*.hmap
+*.ipa
+*.o
+*.p12
+
+# SwiftPM
+.build/
+
+# Local Config
+Configs/Config.xcconfig
+build/

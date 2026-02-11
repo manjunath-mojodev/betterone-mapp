@@ -1,0 +1,86 @@
+[
+    {
+        "slug": "notion-life-os",
+        "title": "Notion Life OS",
+        "subtitle": "I help you run your entire life from one Notion system—tasks, goals, habits, and knowledge—so nothing feels scattered anymore.",
+        "iconName": "macwindow",
+        "sortOrder": 0
+    },
+    {
+        "slug": "simplified-life-os",
+        "title": "Simplified Life OS",
+        "subtitle": "I give you a clean, beginner-friendly Life OS so you can get organized without complex databases or overwhelm.",
+        "iconName": "leaf",
+        "sortOrder": 1
+    },
+    {
+        "slug": "second-brain",
+        "title": "Second Brain & Knowledge Management System",
+        "subtitle": "I teach you how to capture, organize, and retrieve ideas so your best thoughts are never lost.",
+        "iconName": "brain.head.profile",
+        "sortOrder": 2
+    },
+    {
+        "slug": "client-content-os",
+        "title": "Client & Content OS",
+        "subtitle": "I help you manage clients, content pipelines, and collaborations in one place—perfect for creators and freelancers.",
+        "iconName": "person.2.crop.square.stack",
+        "sortOrder": 3
+    },
+    {
+        "slug": "goal-setting",
+        "title": "Goal Setting & Planning System",
+        "subtitle": "I show you how to turn vague goals into clear plans with actionable steps and long-term tracking.",
+        "iconName": "target",
+        "sortOrder": 4
+    },
+    {
+        "slug": "habit-tracking",
+        "title": "Habit Tracking & Habit Building System",
+        "subtitle": "I help you build and maintain habits using simple trackers, reflection, and consistency-first workflows.",
+        "iconName": "checklist",
+        "sortOrder": 5
+    },
+    {
+        "slug": "task-project-management",
+        "title": "Task & Project Management System",
+        "subtitle": "I help you stay on top of daily tasks and long-term projects with clear priorities and flexible dashboards.",
+        "iconName": "list.bullet.rectangle",
+        "sortOrder": 6
+    },
+    {
+        "slug": "ai-agent-os",
+        "title": "Notion AI & AgentOS Framework",
+        "subtitle": "I show you how to use Notion AI to create personal agents that help you think, plan, and execute better.",
+        "iconName": "sparkles",
+        "sortOrder": 7
+    },
+    {
+        "slug": "notion-foundations",
+        "title": "Notion From Scratch (Foundations KB)",
+        "subtitle": "I teach you Notion from the ground up—databases, relations, formulas, and dashboards—step by step.",
+        "iconName": "hammer",
+        "sortOrder": 8
+    },
+    {
+        "slug": "productivity-principles",
+        "title": "Productivity Principles & Workflows",
+        "subtitle": "I help you understand how productivity really works and apply proven workflows inside Notion.",
+        "iconName": "bolt",
+        "sortOrder": 9
+    },
+    {
+        "slug": "info-org-capture",
+        "title": "Information Organization & Idea Capture System",
+        "subtitle": "I help you capture ideas effortlessly and organize them so they’re always easy to find and use later.",
+        "iconName": "tray.full",
+        "sortOrder": 10
+    },
+    {
+        "slug": "design-workspace",
+        "title": "Design-First Notion Workspace System",
+        "subtitle": "I help you design clean, aesthetic, and intuitive Notion dashboards that you’ll actually enjoy using.",
+        "iconName": "paintpalette",
+        "sortOrder": 11
+    }
+]

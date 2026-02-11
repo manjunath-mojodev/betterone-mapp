@@ -1,0 +1,317 @@
+[
+    {
+        "topicSlug": "productivity-principles",
+        "coreIdea": "True productivity is essentialism — doing fewer things with more intention, not cramming more into each day. Better Creating's philosophy is 'less, but better'.",
+        "whenToUse": "When the user equates being busy with being productive, or feels exhausted despite working hard.",
+        "heuristics": ["Identify your top 3 priorities before starting the day", "Protect deep work time from shallow interruptions", "Energy management matters as much as time management"],
+        "whatToAvoid": ["Optimizing for speed without questioning if the task matters", "Ignoring rest as part of the productivity equation"],
+        "sourceReference": "Essentialist Productivity Coach",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "productivity-principles",
+        "coreIdea": "The Part-time Productivity methodology combines GTD, Essentialism, Deep Work, Atomic Habits, and PARA into one cohesive system that helps you achieve more with less effort.",
+        "whenToUse": "When the user needs a unified productivity framework rather than picking from disconnected methods.",
+        "heuristics": ["Use GTD's Capture-Clarify-Organize-Reflect-Engage workflow as the backbone", "Apply Essentialism to regularly ask 'What is the one thing that really matters now?'", "Combine Eisenhower Matrix with Do/Defer/Delegate/Delete for fast triage"],
+        "whatToAvoid": ["Trying to implement all frameworks simultaneously", "Treating the system as rigid rather than adaptive to your context"],
+        "sourceReference": "Essentialist Productivity Coach",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "productivity-principles",
+        "coreIdea": "Deep Work means time-blocking 60-120 minute focus sessions on a single cognitively demanding task, with a defined location, duration, objective, and shutdown ritual.",
+        "whenToUse": "When the user struggles to find focus time or gets constantly interrupted by shallow work.",
+        "heuristics": ["Block 2-4 deep work sessions per week minimum", "Batch shallow work like email and approvals into dedicated admin blocks", "Use a shutdown ritual to end the workday cleanly and set tomorrow's One Thing"],
+        "whatToAvoid": ["Scheduling deep work after energy-draining meetings", "Skipping the shutdown ritual and letting work bleed into personal time"],
+        "sourceReference": "Essentialist Productivity Coach — Cal Newport's Deep Work",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "productivity-principles",
+        "coreIdea": "Structured decision-making using proven frameworks reduces cognitive bias and improves outcomes by 25-40%. Always ask questions first, then apply frameworks, then decide.",
+        "whenToUse": "When the user faces a complex decision and feels stuck or overwhelmed by options.",
+        "heuristics": ["Classify decisions as reversible (two-way door) or irreversible (one-way door) to calibrate effort", "Use the lightest-weight framework that fits the situation", "Document decisions with rationale for future learning"],
+        "whatToAvoid": ["Over-analyzing reversible decisions — just decide and adjust", "Skipping the bias check before finalizing important choices"],
+        "sourceReference": "Decision & Strategy Coach",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "productivity-principles",
+        "coreIdea": "The Eisenhower Matrix separates what's genuinely important from what's merely loud. Spend more time in Important/Not-Urgent (Quadrant II) to stay proactive rather than reactive.",
+        "whenToUse": "When the user feels overwhelmed by tasks or can't distinguish urgent from important work.",
+        "heuristics": ["Run an Eisenhower pass when overloaded: delete and delegate first, batch the rest", "Combine with Do/Defer/Delegate/Delete for fast triage", "Protect Quadrant II time — that's where goals actually advance"],
+        "whatToAvoid": ["Living in Quadrant I (urgent + important) — that's firefighting, not productivity", "Treating every incoming request as equally urgent"],
+        "sourceReference": "Decision & Strategy Coach — Covey/Eisenhower Priority Matrix",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "productivity-principles",
+        "coreIdea": "Coaching questions unlock clarity faster than advice. Use targeted prompts like 'What does good look like by [date]?' and 'What's the smallest valuable version you can finish this week?'",
+        "whenToUse": "When the user needs help clarifying their goals or next steps rather than more information.",
+        "heuristics": ["Lead with questions to create clarity before giving recommendations", "Reflect back what you heard in 3-5 bullets like a real coach", "Connect patterns across different areas of their life and work"],
+        "whatToAvoid": ["Jumping straight to solutions without understanding the context", "Overwhelming with too many options — offer 1-3 tailored suggestions maximum"],
+        "sourceReference": "Essentialist Productivity Coach",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "goal-setting",
+        "coreIdea": "Effective goals are specific, broken into quarterly milestones, and reviewed at regular cadences — weekly, monthly, quarterly, and yearly — to stay relevant and motivating.",
+        "whenToUse": "When the user has vague ambitions but no clear plan, or their goals feel disconnected from daily actions.",
+        "heuristics": ["Break annual goals into quarterly milestones, then connect each to weekly actionable tasks", "Choose a Daily One Thing tied to an active goal most days", "Run yearly reviews to set themes and top 3 goals, then translate into Q1 projects"],
+        "whatToAvoid": ["Setting too many goals at once — pick 1-2 bets per quarter", "Never revisiting goals after setting them"],
+        "sourceReference": "Essentialist Productivity Coach — Reviews & Goal Alignment",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "goal-setting",
+        "coreIdea": "Review cadences keep goals alive: weekly reviews (45-60 min) clear inboxes and set Big 3; monthly reviews reset goals and tidy PARA; quarterly reviews prune non-essentials; yearly reviews set life themes.",
+        "whenToUse": "When the user's goals drift because they lack a review rhythm, or projects stall without regular check-ins.",
+        "heuristics": ["Weekly: clear inboxes, brain dump, update project status, choose next week's Big 3", "Monthly: review metrics, archive stale projects, reset monthly goals", "Quarterly: outcomes vs goals, essentialist pruning — cut 2-3 non-essentials"],
+        "whatToAvoid": ["Skipping reviews because they feel like overhead — they're the productivity engine", "Doing reviews without actually updating tasks, projects, and goals"],
+        "sourceReference": "Essentialist Productivity Coach — Standard Productivity Workflows",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "goal-setting",
+        "coreIdea": "Decision frameworks like SWOT-to-TOWS, Premortem, and First Principles thinking help turn vague strategic goals into concrete action plans with identified risks.",
+        "whenToUse": "When the user needs to evaluate strategic options or stress-test a plan before committing.",
+        "heuristics": ["Use SWOT then flip to TOWS to generate 3-5 concrete plays from your analysis", "Run a Premortem: assume you failed, ask why, then fix those weak points now", "Apply First Principles: strip away assumptions and rebuild from fundamentals"],
+        "whatToAvoid": ["Using heavy frameworks for simple reversible decisions", "Analysis paralysis — set a time limit and decide"],
+        "sourceReference": "Decision & Strategy Coach — Framework Library",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "habit-tracking",
+        "coreIdea": "Consistency matters more than intensity. Use Atomic Habits' cue-craving-response-reward loop to design habits via habit stacking, environment design, and 2-minute starting steps.",
+        "whenToUse": "When the user wants to build new habits or struggles to maintain routines they've started.",
+        "heuristics": ["Start with one habit at a time using a 2-minute version to lower the barrier", "Anchor new habits to existing routines through habit stacking", "Track completion visually to build momentum — use a daily log"],
+        "whatToAvoid": ["Tracking too many habits simultaneously", "Treating a missed day as total failure — focus on never missing twice"],
+        "sourceReference": "Essentialist Productivity Coach — Atomic Habits (James Clear)",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "habit-tracking",
+        "coreIdea": "A Notion habit tracker with daily logs, frequency settings, and year summaries provides visual accountability that compounds small daily actions into significant results.",
+        "whenToUse": "When the user wants a practical system to log and review habits with clear progress indicators.",
+        "heuristics": ["Set habit duration with start and end dates and choose a frequency (1=weekly, 7=daily)", "Use one-click logging buttons on a daily dashboard for frictionless tracking", "Review year summaries to see patterns and celebrate streaks"],
+        "whatToAvoid": ["Overcomplicating the tracker with too many properties", "Setting up habits without defining the identity statement behind them"],
+        "sourceReference": "Essential Notion Habit Tracker",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "habit-tracking",
+        "coreIdea": "Energy and recovery anchors are habits too: set a sleep window, take movement snacks after deep work blocks, schedule weekly blank space, and use device focus modes.",
+        "whenToUse": "When the user is focused on output habits but neglecting recovery, or when energy levels are inconsistent.",
+        "heuristics": ["Schedule one evening or half-day per week with no tasks — blank space for recovery", "Take a 10-20 minute sunlight walk after each deep work block", "Dock phone outside bedroom and use focus modes during deep work"],
+        "whatToAvoid": ["Treating recovery as optional or lazy — it's part of the productivity equation", "Filling every moment with productive activity"],
+        "sourceReference": "Essentialist Productivity Coach — Energy & Recovery Anchors",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "task-project-management",
+        "coreIdea": "A priority matrix with four quadrants (Do Now, Deep Work, Delegate, Low) combined with GTD inbox processing keeps tasks organized and ensures the right work gets done first.",
+        "whenToUse": "When the user feels buried in tasks or can't distinguish what to work on next.",
+        "heuristics": ["Process your inbox: if it takes 2 minutes or less, do it now; otherwise defer, delegate, or delete", "Use a daily focus list of 3-5 key tasks with one Daily One Thing tied to a goal", "Separate someday/maybe items from active commitments"],
+        "whatToAvoid": ["Treating every task as equally urgent", "Maintaining a single flat list without project context or priority levels"],
+        "sourceReference": "Essential Task & Project Manager",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "task-project-management",
+        "coreIdea": "Projects need structure: a desired outcome, definition of done, next action, owner, due/review dates, and a link to the relevant goal. Review projects weekly to keep them moving.",
+        "whenToUse": "When the user has projects that stall or lack clear next steps and accountability.",
+        "heuristics": ["Every project must have at least one concrete next action at all times", "Set review frequency per project — weekly for active, monthly for slow-burn", "Use timeline and board views to visualize project status and deadlines"],
+        "whatToAvoid": ["Creating projects without connecting them to goals or life areas", "Letting projects sit without a defined next action — that's where stalls happen"],
+        "sourceReference": "Essential Task & Project Manager",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "task-project-management",
+        "coreIdea": "A daily planning ritual (5-10 min) pulls today's events, chooses a Daily One Thing, time-blocks deep work and admin, and sets two guardrails: hard stop time and recovery activity.",
+        "whenToUse": "When the user starts days reactively without a clear plan, or regularly works past healthy boundaries.",
+        "heuristics": ["Pull today's events and constraints first, then choose your One Thing", "Time-block deep work and admin batches; add a shutdown ritual", "Set a hard stop time and a recovery activity as non-negotiable guardrails"],
+        "whatToAvoid": ["Planning more than 70-80% of calendar capacity — leave buffer", "Skipping the daily planning because it feels like overhead"],
+        "sourceReference": "Essentialist Productivity Coach — Daily Focus Workflow",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "ai-agent-os",
+        "coreIdea": "Personal AI agents work best when given a clear identity, structured instructions using IF/THEN logic, specific output formats, and mode-specific expertise with clean handoff protocols.",
+        "whenToUse": "When the user wants to build or optimize AI agent instructions for reliable, consistent results.",
+        "heuristics": ["Define the agent's role, personality, and boundaries upfront in a standardized template", "Use distinct modes for different tasks with explicit handoff triggers between them", "Include example outputs to drive behavior — show, don't just describe"],
+        "whatToAvoid": ["Giving the agent vague or contradictory instructions", "Expecting one generic prompt to handle all use cases"],
+        "sourceReference": "Meta-Agent: Prompt Engineering Expert",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "ai-agent-os",
+        "coreIdea": "Rate every AI instruction set on five criteria: Accuracy (>95% correct execution), Consistency (same input = same output), Completeness (handles edge cases), Clarity (no ambiguity), and Integration (clean handoffs).",
+        "whenToUse": "When the user is evaluating or improving existing AI agent instructions.",
+        "heuristics": ["Apply multishot prompting — provide concrete examples of desired outputs", "Use clear conditional logic: IF contains [pattern] THEN [specific response]", "Add error handling: define what happens when things go wrong"],
+        "whatToAvoid": ["Writing vague instructions like 'help with planning' instead of specific actions like 'schedule 3 tasks'", "Skipping failure case planning and edge case coverage"],
+        "sourceReference": "Meta-Agent: Prompt Engineering Expert",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "ai-agent-os",
+        "coreIdea": "The AgentOS framework organizes AI capabilities into specialized modes (productivity, decision-making, prompt engineering) that work together through defined handoff protocols.",
+        "whenToUse": "When the user wants to understand how to structure a multi-mode AI agent system.",
+        "heuristics": ["Each mode should function independently with its own role, operations, and constraints", "Define explicit triggers for when to hand off between modes vs. continue", "Keep mode isolation — separate coaching from database operations"],
+        "whatToAvoid": ["Mixing responsibilities across modes without clear boundaries", "Building a monolithic agent instruction instead of composable modes"],
+        "sourceReference": "Meta-Agent: Prompt Engineering Expert — AgentOS Framework",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "notion-foundations",
+        "coreIdea": "Understanding databases, relations, formulas, and views gives you the building blocks to create any Notion system. Learn databases before relations, and practice with real use cases.",
+        "whenToUse": "When the user is learning Notion from scratch or wants to understand how advanced features work.",
+        "heuristics": ["Learn databases before relations — master table, board, calendar, and timeline views first", "Practice with a real use case like subscription tracking rather than abstract exercises", "Use linked databases to show the same data in different contexts across dashboards"],
+        "whatToAvoid": ["Memorizing formula syntax without understanding the logic", "Jumping to templates without understanding the underlying structure"],
+        "sourceReference": "Notion Foundations",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "notion-foundations",
+        "coreIdea": "Notion templates like the Subscriptions Tracker demonstrate practical database patterns: properties for cost, frequency, payment method, renewal dates, plus rollups and charts for yearly reports.",
+        "whenToUse": "When the user needs to see how databases, relations, rollups, and charts work together in a real template.",
+        "heuristics": ["Use card views with key properties visible for at-a-glance status", "Set up automated renewal reminders using date properties and filters", "Create year report dashboards with charts showing spending patterns"],
+        "whatToAvoid": ["Overbuilding before you have real data to manage", "Forgetting to duplicate yearly entries for clean historic tracking"],
+        "sourceReference": "Essential Subscriptions Tracker",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "notion-foundations",
+        "coreIdea": "Relational databases in Notion connect different types of information: recipes link to ingredients, meals link to days, tasks link to projects. This is the power of Notion over simple note-taking.",
+        "whenToUse": "When the user wants to understand why and how to use relations between Notion databases.",
+        "heuristics": ["Start with two related databases (e.g., recipes and ingredients) before adding more", "Use relations to link rather than duplicate — one recipe, many meal days", "Create views filtered by the relation to see connected data in context"],
+        "whatToAvoid": ["Duplicating data across databases instead of using relations", "Creating too many relations before understanding how each one adds value"],
+        "sourceReference": "Essential Meal Planner",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "notion-life-os",
+        "coreIdea": "A Life OS integrates tasks, goals, habits, journals, and knowledge into one unified Notion system with linked databases so nothing feels scattered across multiple apps.",
+        "whenToUse": "When the user feels overwhelmed managing multiple apps or wants a single source of truth for their life.",
+        "heuristics": ["Start with one area (e.g., tasks) and expand gradually to goals, habits, and knowledge", "Use PARA (Projects, Areas, Resources, Archives) as the organizational backbone", "Connect databases with relations: tasks link to projects, projects link to goals, goals link to life areas"],
+        "whatToAvoid": ["Building everything at once before using any of it", "Over-complicating with too many properties or views before you have real content"],
+        "sourceReference": "Notion Life OS",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "notion-life-os",
+        "coreIdea": "A Life OS is only as good as its review rhythms. Weekly reviews keep tasks moving, monthly reviews realign goals, and quarterly reviews prune what no longer matters.",
+        "whenToUse": "When the user has built a Notion system but isn't engaging with it consistently.",
+        "heuristics": ["Schedule reviews as recurring events in your calendar — treat them as non-negotiable", "Use the weekly review to clear inboxes, update projects, and set next week's Big 3", "Archive stale projects during monthly reviews to keep the system clean"],
+        "whatToAvoid": ["Treating the Life OS as a set-it-and-forget-it system", "Spending review time reorganizing instead of making decisions about what matters"],
+        "sourceReference": "Notion Life OS",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "simplified-life-os",
+        "coreIdea": "A simplified system inspired by paper planners gives beginners the power of Notion without the overwhelm. Fewer databases, clearer defaults, and designed for daily use.",
+        "whenToUse": "When the user is new to Notion or has tried and abandoned more complex setups.",
+        "heuristics": ["Fewer databases is better for beginners — start with tasks and a simple journal", "Prioritize clarity over flexibility in your initial setup", "Design for daily use, not edge cases — if you don't use it daily, simplify further"],
+        "whatToAvoid": ["Introducing relations and rollups too early", "Copying advanced setups without understanding the basics"],
+        "sourceReference": "Simplified Life OS",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "simplified-life-os",
+        "coreIdea": "The best system is the one you actually use. Start with a home dashboard that shows today's tasks, this week's focus, and quick-capture buttons — nothing more.",
+        "whenToUse": "When the user keeps building elaborate systems but abandons them after a week.",
+        "heuristics": ["Create a home dashboard as your single daily starting point", "Add quick-capture buttons for the 2-3 things you create most often", "Only add complexity when you feel a genuine friction point, not preemptively"],
+        "whatToAvoid": ["Building for hypothetical future needs instead of current daily workflow", "Adding features because they look cool in someone else's setup"],
+        "sourceReference": "Simplified Life OS",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "second-brain",
+        "coreIdea": "A second brain captures, organizes, and retrieves ideas so your best thoughts are never lost. Use progressive summarization to surface key insights and link notes to active projects.",
+        "whenToUse": "When the user struggles to remember insights, find old notes, or connect ideas across projects.",
+        "heuristics": ["Capture first, organize later — don't let the perfect system prevent you from saving ideas", "Use progressive summarization: bold key passages, then highlight the boldest", "Link notes to projects for actionable context using PARA's project-centric approach"],
+        "whatToAvoid": ["Spending more time organizing than creating", "Building a perfect taxonomy before you have content to organize"],
+        "sourceReference": "Second Brain & Knowledge Management — PARA (Tiago Forte)",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "second-brain",
+        "coreIdea": "Knowledge clippings should be captured with sources, lightly summarized, and linked to Areas, Projects, and Content where applicable. The value is in retrieval, not storage.",
+        "whenToUse": "When the user collects information but can never find it when they need it.",
+        "heuristics": ["Clip with source attribution so you can verify and share later", "Summarize in your own words — that's how you internalize ideas", "Tag by project or area, not by arbitrary categories"],
+        "whatToAvoid": ["Capturing everything without filtering for relevance", "Creating elaborate folder structures before you have content"],
+        "sourceReference": "Second Brain & Knowledge Management",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "client-content-os",
+        "coreIdea": "A unified system for managing clients, content pipelines, and collaborations keeps creators and freelancers from dropping balls. Separate CRM from content calendar but link them.",
+        "whenToUse": "When the user juggles multiple clients or content channels and needs one place to track it all.",
+        "heuristics": ["Separate client CRM from content calendar but link them with relations", "Track pipeline stages visually with board views showing status progression", "Automate recurring deliverables with templates and recurring task patterns"],
+        "whatToAvoid": ["Mixing personal tasks with client work in the same database", "Overbuilding before you have real client data to manage"],
+        "sourceReference": "Client & Content OS",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "client-content-os",
+        "coreIdea": "Content creators need systems for income tracking, invoicing, and project management that link together. Use databases for income, expenses, and client projects with rollup totals.",
+        "whenToUse": "When the user is a creator or freelancer who needs financial visibility alongside project management.",
+        "heuristics": ["Track income by source type (salary, contract, creative) with client relations", "Use rollups to see total revenue per client and per project automatically", "Set up yearly financial views with charts to spot trends"],
+        "whatToAvoid": ["Managing finances in spreadsheets separate from your project system", "Forgetting to log income and expenses consistently"],
+        "sourceReference": "Client & Content OS",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "info-org-capture",
+        "coreIdea": "Effortless idea capture with a single inbox and regular processing ensures your best thoughts are always easy to find. Use GTD's capture-clarify-organize flow.",
+        "whenToUse": "When the user has ideas scattered across apps, sticky notes, and browser tabs with no retrieval system.",
+        "heuristics": ["Use a single inbox for all captures, then process regularly with GTD's clarify step", "Apply the 2-minute rule: if it takes less than 2 minutes, do it now", "Review your capture inbox weekly to prevent buildup and maintain trust in the system"],
+        "whatToAvoid": ["Creating elaborate folder structures before you have content", "Capturing everything without filtering for relevance — be selective"],
+        "sourceReference": "Information Organization & Capture — GTD Method",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "info-org-capture",
+        "coreIdea": "Meeting notes should be processed into structured, linked tasks with clear owners and dates. Don't let action items hide inside unprocessed notes.",
+        "whenToUse": "When the user takes meeting notes but actions get lost or forgotten afterward.",
+        "heuristics": ["Extract decisions and actions from meeting notes immediately", "Create linked tasks with due dates and owners for each action item", "Link meeting notes to the relevant project for context"],
+        "whatToAvoid": ["Leaving meeting notes unprocessed for more than 24 hours", "Creating tasks without owners or due dates"],
+        "sourceReference": "Essentialist Productivity Coach — Meeting Notes Workflow",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "design-workspace",
+        "coreIdea": "Clean, aesthetic Notion dashboards that you enjoy using lead to more consistent engagement. Prioritize whitespace over information density and design the home dashboard as your daily starting point.",
+        "whenToUse": "When the user's workspace feels cluttered or they avoid opening Notion because it looks overwhelming.",
+        "heuristics": ["Use consistent iconography and color coding across your workspace", "Prioritize whitespace over information density — less is more", "Design the home dashboard as your daily starting point with only what you need today"],
+        "whatToAvoid": ["Sacrificing function for aesthetics — the system must work first", "Spending more time decorating than actually using the workspace"],
+        "sourceReference": "Design-First Workspace",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "design-workspace",
+        "coreIdea": "Quick action buttons, clear navigation, and visual hierarchy make Notion dashboards feel intuitive. Group related actions together and use callouts for orientation.",
+        "whenToUse": "When the user wants to make their Notion workspace more usable and navigable.",
+        "heuristics": ["Add quick action buttons for frequent tasks (New Task, New Project, Do Weekly Review)", "Use callouts and toggles to organize information without visual clutter", "Create multiple views of the same database for different contexts (table, board, calendar)"],
+        "whatToAvoid": ["Putting everything on one page without visual hierarchy", "Creating navigation that requires more than 2 clicks to reach common actions"],
+        "sourceReference": "Design-First Workspace",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "design-workspace",
+        "coreIdea": "3D printing is a powerful tool for solving physical workspace problems — custom mounts, brackets, organizers, and desk accessories that don't exist commercially or cost far more than printing them yourself.",
+        "whenToUse": "When the user wants to optimize their physical desk setup, studio, or workspace with custom-fit solutions.",
+        "heuristics": ["Start by printing other people's designs from platforms like Maker World, Printables, or Thingiverse before designing your own", "Use beginner-friendly tools like TinkerCAD (free, browser-based) for simple custom designs before graduating to Fusion 360 or Blender", "Match the exact aesthetic you want — 3D printing lets you avoid the 'close enough' compromise of mass-produced options"],
+        "whatToAvoid": ["Over-investing in complex CAD software before mastering the basics of printing existing designs", "Ignoring practical workspace needs like stable surfaces and dedicated storage for filament and supplies"],
+        "sourceReference": "3D Printing for Beginners — Better Creating",
+        "role": "knowledge"
+    },
+    {
+        "topicSlug": "productivity-principles",
+        "coreIdea": "3D printing transforms 'I wish I had something that could...' moments into solved problems. It's a creative problem-solving tool that turns ideas into physical objects in hours, like having a mini factory at your desk that runs on ideas.",
+        "whenToUse": "When the user is looking for creative outlets that also serve practical productivity purposes, or exploring new technology as a hobby.",
+        "heuristics": ["Start simple — print accessories and practical items before attempting complex custom designs", "Embrace the learning curve: expect some failed prints and treat troubleshooting as part of the creative process", "Use the beginner-friendly ecosystem: modern printers like the Bambu Labs A1 have auto-calibration and app-based workflows that remove most technical barriers"],
+        "whatToAvoid": ["Treating 3D printing as purely a technical skill — it's equally a creative and problem-solving hobby", "Spending hours perfecting a design without testing it early — print quick prototypes and iterate"],
+        "sourceReference": "3D Printing for Beginners — Better Creating",
+        "role": "knowledge"
+    }
+]
