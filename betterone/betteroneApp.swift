@@ -24,7 +24,20 @@ struct betteroneApp: App {
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            // Schema changed since last install — delete old store and recreate
+            let url = modelConfiguration.url
+            print("⚠️ SwiftData migration failed, removing old store: \(error)")
+            try? FileManager.default.removeItem(at: url)
+            // Also remove write-ahead log and shared memory files
+            let walURL = url.appendingPathExtension("wal")
+            let shmURL = url.appendingPathExtension("shm")
+            try? FileManager.default.removeItem(at: walURL)
+            try? FileManager.default.removeItem(at: shmURL)
+            do {
+                return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            } catch {
+                fatalError("Could not create ModelContainer after reset: \(error)")
+            }
         }
     }()
 

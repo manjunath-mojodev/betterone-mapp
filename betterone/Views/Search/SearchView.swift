@@ -36,6 +36,7 @@ struct SearchView: View {
                 if !viewModel.searchText.isEmpty {
                     Button {
                         viewModel.clear()
+                        isSearchFocused = false
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundStyle(Theme.textSecondary)
@@ -72,6 +73,9 @@ struct SearchView: View {
             Spacer()
         }
         .background(Color(uiColor: .systemGroupedBackground))
+        .onTapGesture {
+            isSearchFocused = false
+        }
         .navigationTitle("Search")
         .navigationBarTitleDisplayMode(.large)
     }

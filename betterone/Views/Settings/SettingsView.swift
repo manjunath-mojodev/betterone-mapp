@@ -1,11 +1,13 @@
 import SwiftUI
 import SwiftData
+import StoreKit
 
 struct SettingsView: View {
     @Environment(SubscriptionService.self) private var subscriptionService
     @Environment(AppState.self) private var appState
     @Environment(\.modelContext) private var modelContext
-    
+    @Environment(\.requestReview) private var requestReview
+
     @State private var showResetConfirmation = false
 
     var body: some View {
@@ -41,6 +43,14 @@ struct SettingsView: View {
                     WidgetSetupGuideView()
                 } label: {
                     Label("Set Up Home Screen Widget", systemImage: "rectangle.on.rectangle")
+                }
+            }
+
+            Section("Support") {
+                Button {
+                    requestReview()
+                } label: {
+                    Label("Rate Us on the App Store", systemImage: "star.fill")
                 }
             }
 
