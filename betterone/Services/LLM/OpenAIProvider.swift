@@ -50,8 +50,9 @@ struct OpenAIProvider: LLMProvider {
 
     private func buildRequest(messages: [LLMMessage], config: LLMConfiguration, stream: Bool) throws -> URLRequest {
         guard !config.apiKey.isEmpty else { throw LLMError.invalidAPIKey }
+        guard let url = URL(string: baseURL) else { throw LLMError.invalidResponse }
 
-        var request = URLRequest(url: URL(string: baseURL)!)
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Bearer \(config.apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

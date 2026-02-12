@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 @main
 struct betteroneApp: App {
@@ -36,9 +37,21 @@ struct betteroneApp: App {
                 .onAppear {
                     seedDataIfNeeded()
                     subscriptionService.configure()
+                    CoachingTipService.refreshTip(modelContext: sharedModelContainer.mainContext)
+                }
+                .onOpenURL { url in
+                    handleDeepLink(url)
                 }
         }
         .modelContainer(sharedModelContainer)
+    }
+
+    private func handleDeepLink(_ url: URL) {
+        guard url.scheme == SharedConstants.deepLinkScheme,
+              url.host == "topic",
+              let slug = url.pathComponents.dropFirst().first else { return }
+        appState.pendingTopicSlug = slug
+        appState.selectedTab = 0
     }
 
     private func seedDataIfNeeded() {
@@ -53,7 +66,7 @@ struct betteroneApp: App {
                let topics = try? JSONDecoder().decode([SeedTopic].self, from: data) {
                 for seed in topics {
                     let topic = Topic(slug: seed.slug, title: seed.title, subtitle: seed.subtitle,
-                                      iconName: seed.iconName, sortOrder: seed.sortOrder)
+                                      iconName: seed.iconName, sortOrder: seed.sortOrder, isPremium: seed.isPremium)
                     context.insert(topic)
                 }
             }
@@ -123,6 +136,7 @@ private struct SeedTopic: Codable {
     let subtitle: String
     let iconName: String
     let sortOrder: Int
+    let isPremium: Bool
 }
 
 private struct SeedPersona: Codable {

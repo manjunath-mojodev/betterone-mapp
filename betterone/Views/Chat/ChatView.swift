@@ -7,7 +7,6 @@ struct ChatView: View {
     @Environment(LLMService.self) private var llmService
     @Environment(AppState.self) private var appState
     @State var viewModel: ChatViewModel
-    @State private var showEndConfirmation = false
 
     private var topicColor: Color {
         TopicCardView.colorForSlug(viewModel.topic.slug)
@@ -35,7 +34,7 @@ struct ChatView: View {
 
                 if viewModel.hasSelectedIntent {
                     Button {
-                        showEndConfirmation = true
+                        viewModel.endSession(modelContext: modelContext, llmService: llmService)
                     } label: {
                         Image(systemName: "xmark")
                             .font(.system(size: 14, weight: .semibold))
@@ -78,6 +77,7 @@ struct ChatView: View {
                     }
                     .padding(.vertical, Theme.spacingSM)
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .background(topicColor.opacity(Theme.opacitySubtle))
                 .onChange(of: viewModel.messages.last?.content) {
                     scrollToBottom(proxy: proxy)
@@ -121,20 +121,9 @@ struct ChatView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(viewModel.hasSelectedIntent)
         .toolbar(viewModel.hasSelectedIntent ? .hidden : .visible, for: .navigationBar)
-        .confirmationDialog(
-            "End this session?",
-            isPresented: $showEndConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("End Session") {
-                viewModel.endSession(modelContext: modelContext, llmService: llmService)
-            }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("You'll receive a summary of your conversation.")
-        }
         .sheet(isPresented: $viewModel.showWrapUp) {
             SessionWrapUpView(
+                topicTitle: viewModel.topic.title,
                 takeaway: viewModel.sessionTakeaway,
                 nextStep: viewModel.sessionNextStep
             ) {
@@ -183,6 +172,7 @@ struct ChatView: View {
 
                 ForEach(AppConstants.sessionIntents) { intent in
                     Button {
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         withAnimation(Theme.animationDefault) {
                             viewModel.selectIntent(intent, modelContext: modelContext, llmService: llmService)
                         }

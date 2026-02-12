@@ -5,6 +5,15 @@ enum AppConstants {
     static let appName = "BetterOne"
     static let creatorModePasscode = "simon2024"
 
+    /// True for DEBUG builds and TestFlight installs, false for App Store production.
+    static var isDevelopmentBuild: Bool {
+        #if DEBUG
+        return true
+        #else
+        return Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        #endif
+    }
+
     static let helpAreas = [
         "Goal Setting",
         "Career Advice",

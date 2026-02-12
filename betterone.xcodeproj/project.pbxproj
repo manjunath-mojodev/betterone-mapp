@@ -8,17 +8,77 @@
 
 /* Begin PBXBuildFile section */
 		6C0CC1E02F3C48CB00363BB0 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */; };
+		6C0CC5592F3CEB0000363BB0 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 6C0CC2012F3C600100363BB0 /* RevenueCat */; };
+		6C0CC6982F3D6A1C00363BB0 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0CC6972F3D6A1C00363BB0 /* WidgetKit.framework */; };
+		6C0CC69A2F3D6A1C00363BB0 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0CC6992F3D6A1C00363BB0 /* SwiftUI.framework */; };
+		6C0CC6A72F3D6A1D00363BB0 /* BetterOneWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6C0CC6952F3D6A1C00363BB0 /* BetterOneWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6C0CC6A52F3D6A1D00363BB0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6C0CC0B32F38A87000363BB0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C0CC6942F3D6A1C00363BB0;
+			remoteInfo = BetterOneWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6C0CC6AC2F3D6A1D00363BB0 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6C0CC6A72F3D6A1D00363BB0 /* BetterOneWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		6C0CC0BB2F38A87000363BB0 /* betterone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = betterone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		6C0CC6952F3D6A1C00363BB0 /* BetterOneWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BetterOneWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C0CC6972F3D6A1C00363BB0 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		6C0CC6992F3D6A1C00363BB0 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		6C0CC6B92F3D6A9100363BB0 /* BetterOneWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BetterOneWidgetExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6C0CC6A82F3D6A1D00363BB0 /* Exceptions for "BetterOneWidget" folder in "BetterOneWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6C0CC6942F3D6A1C00363BB0 /* BetterOneWidgetExtension */;
+		};
+		6C0CC6BB2F3D6ACD00363BB0 /* Exceptions for "betterone" folder in "betterone" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6C0CC0BA2F38A87000363BB0 /* betterone */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6C0CC0BD2F38A87000363BB0 /* betterone */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6C0CC6BB2F3D6ACD00363BB0 /* Exceptions for "betterone" folder in "betterone" target */,
+			);
 			path = betterone;
+			sourceTree = "<group>";
+		};
+		6C0CC69B2F3D6A1C00363BB0 /* BetterOneWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6C0CC6A82F3D6A1D00363BB0 /* Exceptions for "BetterOneWidget" folder in "BetterOneWidgetExtension" target */,
+			);
+			path = BetterOneWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -28,6 +88,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C0CC5592F3CEB0000363BB0 /* RevenueCat in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C0CC6922F3D6A1C00363BB0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C0CC69A2F3D6A1C00363BB0 /* SwiftUI.framework in Frameworks */,
+				6C0CC6982F3D6A1C00363BB0 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,7 +107,10 @@
 		6C0CC0B22F38A87000363BB0 = {
 			isa = PBXGroup;
 			children = (
+				6C0CC6B92F3D6A9100363BB0 /* BetterOneWidgetExtension.entitlements */,
 				6C0CC0BD2F38A87000363BB0 /* betterone */,
+				6C0CC69B2F3D6A1C00363BB0 /* BetterOneWidget */,
+				6C0CC6962F3D6A1C00363BB0 /* Frameworks */,
 				6C0CC0BC2F38A87000363BB0 /* Products */,
 				6C0CC1DF2F3C48CB00363BB0 /* Config.xcconfig */,
 			);
@@ -47,8 +120,18 @@
 			isa = PBXGroup;
 			children = (
 				6C0CC0BB2F38A87000363BB0 /* betterone.app */,
+				6C0CC6952F3D6A1C00363BB0 /* BetterOneWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6C0CC6962F3D6A1C00363BB0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C0CC6972F3D6A1C00363BB0 /* WidgetKit.framework */,
+				6C0CC6992F3D6A1C00363BB0 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -62,20 +145,45 @@
 				6C0CC0B72F38A87000363BB0 /* Sources */,
 				6C0CC0B82F38A87000363BB0 /* Frameworks */,
 				6C0CC0B92F38A87000363BB0 /* Resources */,
+				6C0CC6AC2F3D6A1D00363BB0 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6C0CC6A62F3D6A1D00363BB0 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				6C0CC0BD2F38A87000363BB0 /* betterone */,
 			);
 			name = betterone;
 			packageProductDependencies = (
+				6C0CC2012F3C600100363BB0 /* RevenueCat */,
 			);
 			productName = betterone;
 			productReference = 6C0CC0BB2F38A87000363BB0 /* betterone.app */;
 			productType = "com.apple.product-type.application";
+		};
+		6C0CC6942F3D6A1C00363BB0 /* BetterOneWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C0CC6A92F3D6A1D00363BB0 /* Build configuration list for PBXNativeTarget "BetterOneWidgetExtension" */;
+			buildPhases = (
+				6C0CC6912F3D6A1C00363BB0 /* Sources */,
+				6C0CC6922F3D6A1C00363BB0 /* Frameworks */,
+				6C0CC6932F3D6A1C00363BB0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6C0CC69B2F3D6A1C00363BB0 /* BetterOneWidget */,
+			);
+			name = BetterOneWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = BetterOneWidgetExtension;
+			productReference = 6C0CC6952F3D6A1C00363BB0 /* BetterOneWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -90,6 +198,9 @@
 					6C0CC0BA2F38A87000363BB0 = {
 						CreatedOnToolsVersion = 26.2;
 					};
+					6C0CC6942F3D6A1C00363BB0 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 				};
 			};
 			buildConfigurationList = 6C0CC0B62F38A87000363BB0 /* Build configuration list for PBXProject "betterone" */;
@@ -101,12 +212,16 @@
 			);
 			mainGroup = 6C0CC0B22F38A87000363BB0;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6C0CC2002F3C600000363BB0 /* XCRemoteSwiftPackageReference "purchases-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6C0CC0BC2F38A87000363BB0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				6C0CC0BA2F38A87000363BB0 /* betterone */,
+				6C0CC6942F3D6A1C00363BB0 /* BetterOneWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -117,6 +232,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C0CC1E02F3C48CB00363BB0 /* Config.xcconfig in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C0CC6932F3D6A1C00363BB0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,7 +263,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cat > \"${SRCROOT}/betterone/App/Secrets.generated.swift\" <<EOF\n// Auto-generated at build time — do NOT edit or commit.\nimport Foundation\n\nenum Secrets {\n    static let llmAPIKey = \"${LLM_API_KEY}\"\n}\nEOF\n";
+			shellScript = "cat > \"${SRCROOT}/betterone/App/Secrets.generated.swift\" <<EOF\n// Auto-generated at build time — do NOT edit or commit.\nimport Foundation\n\nenum Secrets {\n    static let llmAPIKey = \"${LLM_API_KEY}\"\n    static let revenueCatDevAPIKey = \"${REVENUECAT_DEV_API_KEY}\"\n    static let revenueCatProdAPIKey = \"${REVENUECAT_PROD_API_KEY}\"\n\n    static var revenueCatAPIKey: String {\n        #if DEBUG\n        return revenueCatDevAPIKey\n        #else\n        return revenueCatProdAPIKey\n        #endif\n    }\n}\nEOF\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -153,7 +275,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6C0CC6912F3D6A1C00363BB0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6C0CC6A62F3D6A1D00363BB0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C0CC6942F3D6A1C00363BB0 /* BetterOneWidgetExtension */;
+			targetProxy = 6C0CC6A52F3D6A1D00363BB0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		6C0CC0C62F38A87100363BB0 /* Debug */ = {
@@ -285,11 +422,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = betterone/betterone.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MM4MLN38NV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = betterone/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -318,11 +457,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = betterone/betterone.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = MM4MLN38NV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = betterone/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -338,6 +479,68 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6C0CC6AA2F3D6A1D00363BB0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = BetterOneWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MM4MLN38NV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BetterOneWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BetterOneWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zingybear.betterone.BetterOneWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6C0CC6AB2F3D6A1D00363BB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = BetterOneWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = MM4MLN38NV;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BetterOneWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BetterOneWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zingybear.betterone.BetterOneWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -366,7 +569,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		6C0CC6A92F3D6A1D00363BB0 /* Build configuration list for PBXNativeTarget "BetterOneWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C0CC6AA2F3D6A1D00363BB0 /* Debug */,
+				6C0CC6AB2F3D6A1D00363BB0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6C0CC2002F3C600000363BB0 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6C0CC2012F3C600100363BB0 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6C0CC2002F3C600000363BB0 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6C0CC0B32F38A87000363BB0 /* Project object */;
 }

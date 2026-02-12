@@ -14,6 +14,7 @@ final class SearchViewModel {
     var llmResults: [TopicMatch] = []
     var isSearchingLLM: Bool = false
     var hasSubmitted: Bool = false
+    private var searchTask: Task<Void, Never>?
 
     var showLLMResults: Bool {
         hasSubmitted && !llmResults.isEmpty
@@ -89,7 +90,8 @@ final class SearchViewModel {
         let userPrompt = query
         let allTopics = topics
 
-        Task {
+        searchTask?.cancel()
+        searchTask = Task {
             do {
                 let response = try await llmService.complete(messages: [
                     LLMMessage(role: "system", content: systemPrompt),
@@ -117,6 +119,8 @@ final class SearchViewModel {
     }
 
     func clear() {
+        searchTask?.cancel()
+        searchTask = nil
         searchText = ""
         localResults = []
         llmResults = []

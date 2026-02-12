@@ -1,5 +1,5 @@
 import Foundation
-import StoreKit
+import RevenueCat
 
 /// Subscription tiers for the app
 enum SubscriptionTier: String, CaseIterable {
@@ -14,54 +14,53 @@ enum SubscriptionTier: String, CaseIterable {
     }
 }
 
-/// Subscription service using StoreKit 2.
-/// Designed with a RevenueCat-compatible interface for easy migration.
+/// Entitlement identifier configured in RevenueCat dashboard
+private enum RevenueCatConstants {
+    static let premiumEntitlementId = "premium"
+}
+
+/// Subscription service using RevenueCat.
 @Observable
-final class SubscriptionService {
+final class SubscriptionService: NSObject {
     // MARK: - Product IDs
 
-    /// Configure these in App Store Connect
     static let premiumMonthlyId = "com.betterone.premium.monthly"
     static let premiumYearlyId = "com.betterone.premium.yearly"
-    private static let productIds: Set<String> = [premiumMonthlyId, premiumYearlyId]
 
     // MARK: - State
 
-    var currentTier: SubscriptionTier = .free
+    private(set) var actualTier: SubscriptionTier = .free
+    var overrideTier: SubscriptionTier?
+    var currentTier: SubscriptionTier { overrideTier ?? actualTier }
     var isSubscribed: Bool { currentTier == .premium }
-    var availableProducts: [Product] = []
+    var availablePackages: [RevenueCat.Package] = []
     var purchaseInProgress = false
     var errorMessage: String?
 
-    /// Number of free sessions allowed before paywall
-    let freeSessionLimit = 3
-
-    private var updateListenerTask: Task<Void, Never>?
+    /// Free users have unlimited sessions; premium gates topics, not sessions.
+    var canAlwaysStartSession: Bool { true }
 
     // MARK: - Lifecycle
 
     func configure() {
-        updateListenerTask = Task { [weak self] in
-            guard let self else { return }
-            await self.listenForTransactionUpdates()
-        }
+        Purchases.logLevel = .debug
+        Purchases.configure(withAPIKey: Secrets.revenueCatAPIKey)
+        Purchases.shared.delegate = self
 
         Task { [weak self] in
-            await self?.loadProducts()
+            await self?.loadOfferings()
             await self?.checkEntitlements()
         }
     }
 
-    deinit {
-        updateListenerTask?.cancel()
-    }
+    // MARK: - Offerings
 
-    // MARK: - Products
-
-    func loadProducts() async {
+    func loadOfferings() async {
         do {
-            let products = try await Product.products(for: Self.productIds)
-            availableProducts = products.sorted { $0.price < $1.price }
+            let offerings = try await Purchases.shared.offerings()
+            if let current = offerings.current {
+                availablePackages = current.availablePackages
+            }
         } catch {
             errorMessage = "Failed to load subscription options."
         }
@@ -69,27 +68,15 @@ final class SubscriptionService {
 
     // MARK: - Purchase
 
-    func purchase(_ product: Product) async {
+    func purchase(_ package: RevenueCat.Package) async {
         purchaseInProgress = true
         errorMessage = nil
 
         do {
-            let result = try await product.purchase()
+            let result = try await Purchases.shared.purchase(package: package)
 
-            switch result {
-            case .success(let verification):
-                let transaction = try checkVerified(verification)
-                await transaction.finish()
-                await checkEntitlements()
-
-            case .userCancelled:
-                break
-
-            case .pending:
-                errorMessage = "Purchase is pending approval."
-
-            @unknown default:
-                break
+            if !result.userCancelled {
+                updateTier(from: result.customerInfo)
             }
         } catch {
             errorMessage = "Purchase failed: \(error.localizedDescription)"
@@ -102,8 +89,8 @@ final class SubscriptionService {
 
     func restorePurchases() async {
         do {
-            try await AppStore.sync()
-            await checkEntitlements()
+            let customerInfo = try await Purchases.shared.restorePurchases()
+            updateTier(from: customerInfo)
         } catch {
             errorMessage = "Restore failed: \(error.localizedDescription)"
         }
@@ -112,44 +99,33 @@ final class SubscriptionService {
     // MARK: - Entitlement Check
 
     func checkEntitlements() async {
-        var hasPremium = false
-
-        for await result in Transaction.currentEntitlements {
-            if let transaction = try? checkVerified(result) {
-                if Self.productIds.contains(transaction.productID) {
-                    hasPremium = true
-                }
-            }
+        do {
+            let customerInfo = try await Purchases.shared.customerInfo()
+            updateTier(from: customerInfo)
+        } catch {
+            actualTier = .free
         }
-
-        currentTier = hasPremium ? .premium : .free
     }
 
-    /// Check how many sessions the user has used (called externally with a count)
+    /// Free users can always start sessions. Premium gates topics, not session count.
     func canStartSession(currentSessionCount: Int) -> Bool {
-        if isSubscribed { return true }
-        return currentSessionCount < freeSessionLimit
+        return true
     }
 
-    // MARK: - Transaction Updates
+    // MARK: - Private
 
-    private func listenForTransactionUpdates() async {
-        for await result in Transaction.updates {
-            if let transaction = try? checkVerified(result) {
-                await transaction.finish()
-                await checkEntitlements()
-            }
-        }
+    private func updateTier(from customerInfo: CustomerInfo) {
+        let hasPremium = customerInfo.entitlements[RevenueCatConstants.premiumEntitlementId]?.isActive == true
+        actualTier = hasPremium ? .premium : .free
     }
+}
 
-    // MARK: - Verification
+// MARK: - PurchasesDelegate
 
-    private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
-        switch result {
-        case .unverified(_, let error):
-            throw error
-        case .verified(let value):
-            return value
+extension SubscriptionService: PurchasesDelegate {
+    nonisolated func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
+        Task { @MainActor in
+            self.updateTier(from: customerInfo)
         }
     }
 }

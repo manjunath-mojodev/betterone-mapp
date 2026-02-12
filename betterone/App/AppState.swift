@@ -7,6 +7,7 @@ final class AppState {
     }
     var showTabBar: Bool = true
     var selectedTab: Int = 0
+    var pendingTopicSlug: String?
 
     init() {
         self.onboardingComplete = UserDefaults.standard.bool(forKey: "onboardingComplete")

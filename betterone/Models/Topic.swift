@@ -10,6 +10,7 @@ final class Topic {
     var iconName: String
     var sortOrder: Int
     var isActive: Bool
+    var isPremium: Bool
 
     @Relationship(deleteRule: .cascade, inverse: \KnowledgeObject.topic)
     var knowledgeObjects: [KnowledgeObject]?
@@ -17,7 +18,7 @@ final class Topic {
     @Relationship(deleteRule: .cascade, inverse: \ChatSession.topic)
     var sessions: [ChatSession]?
 
-    init(slug: String, title: String, subtitle: String, iconName: String, sortOrder: Int) {
+    init(slug: String, title: String, subtitle: String, iconName: String, sortOrder: Int, isPremium: Bool = false) {
         self.id = UUID()
         self.slug = slug
         self.title = title
@@ -25,5 +26,6 @@ final class Topic {
         self.iconName = iconName
         self.sortOrder = sortOrder
         self.isActive = true
+        self.isPremium = isPremium
     }
 }

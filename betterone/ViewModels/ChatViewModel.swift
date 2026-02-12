@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 @MainActor
 @Observable
@@ -98,6 +99,7 @@ final class ChatViewModel {
             session?.takeaway = sessionTakeaway
             session?.nextStep = sessionNextStep
             showWrapUp = true
+            CoachingTipService.refreshTip(modelContext: modelContext)
             return
         }
 
@@ -189,14 +191,16 @@ final class ChatViewModel {
                     self.parseWrapUp(response)
                     self.session?.takeaway = self.sessionTakeaway
                     self.session?.nextStep = self.sessionNextStep
-                case .failure:
-                    self.sessionTakeaway = "You showed up and did the work today."
-                    self.sessionNextStep = "Take one small step from what we discussed."
+                case .failure(let error):
+                    print("🔴 [Chat] wrap-up generation failed: \(error)")
+                    self.sessionTakeaway = "We couldn't generate a summary for this session."
+                    self.sessionNextStep = "Reflect on what stood out to you from this conversation."
                     self.session?.takeaway = self.sessionTakeaway
                     self.session?.nextStep = self.sessionNextStep
                 }
                 self.isStreaming = false
                 self.showWrapUp = true
+                CoachingTipService.refreshTip(modelContext: modelContext)
             }
         }
     }

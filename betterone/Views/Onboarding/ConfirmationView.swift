@@ -36,7 +36,10 @@ struct ConfirmationView: View {
 
             Spacer()
 
-            Button(action: onComplete) {
+            Button {
+                UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                onComplete()
+            } label: {
                 Text("Let's go")
                     .font(Theme.headlineFont)
                     .frame(maxWidth: .infinity)

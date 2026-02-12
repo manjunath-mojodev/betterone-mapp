@@ -128,8 +128,12 @@ struct HistoryNavigationView: View {
 }
 
 struct CoachingNavigationView: View {
+    @Environment(AppState.self) private var appState
+    @Query(sort: \Topic.sortOrder) private var topics: [Topic]
+    @State private var navigationPath = NavigationPath()
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             HomeView()
                 .navigationDestination(for: SectionSelection.self) { section in
                     SectionDetailView(selection: section)
@@ -137,6 +141,12 @@ struct CoachingNavigationView: View {
                 .navigationDestination(for: Topic.self) { topic in
                     ChatView(topic: topic)
                 }
+        }
+        .onChange(of: appState.pendingTopicSlug) { _, slug in
+            guard let slug, let topic = topics.first(where: { $0.slug == slug }) else { return }
+            navigationPath = NavigationPath()
+            navigationPath.append(topic)
+            appState.pendingTopicSlug = nil
         }
     }
 }

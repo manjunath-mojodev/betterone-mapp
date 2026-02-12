@@ -36,23 +36,37 @@ struct SettingsView: View {
                 }
             }
 
-            Section("Development") {
+            Section("Widget") {
                 NavigationLink {
-                    CreatorModeView(viewModel: CreatorModeViewModel(isAuthenticated: true))
+                    WidgetSetupGuideView()
                 } label: {
-                    Label("Creator Mode", systemImage: "hammer")
+                    Label("Set Up Home Screen Widget", systemImage: "rectangle.on.rectangle")
                 }
+            }
 
-                Button(role: .destructive) {
-                    showResetConfirmation = true
-                } label: {
-                    Label("Reset Onboarding", systemImage: "arrow.counterclockwise")
-                }
+            if AppConstants.isDevelopmentBuild {
+                Section("Development") {
+                    NavigationLink {
+                        CreatorModeView(viewModel: CreatorModeViewModel(isAuthenticated: true))
+                    } label: {
+                        Label("Creator Mode", systemImage: "hammer")
+                    }
 
-                Button(role: .destructive) {
-                    hardReset()
-                } label: {
-                    Label("Hard Reset (All Data)", systemImage: "trash")
+                    Toggle(isOn: premiumOverrideBinding) {
+                        Label("Simulate Premium", systemImage: "crown")
+                    }
+
+                    Button(role: .destructive) {
+                        showResetConfirmation = true
+                    } label: {
+                        Label("Reset Onboarding", systemImage: "arrow.counterclockwise")
+                    }
+
+                    Button(role: .destructive) {
+                        hardReset()
+                    } label: {
+                        Label("Hard Reset (All Data)", systemImage: "trash")
+                    }
                 }
             }
         }
@@ -79,6 +93,13 @@ struct SettingsView: View {
         }
     }
     
+    private var premiumOverrideBinding: Binding<Bool> {
+        Binding(
+            get: { subscriptionService.overrideTier == .premium },
+            set: { subscriptionService.overrideTier = $0 ? .premium : nil }
+        )
+    }
+
     private func hardReset() {
         do {
             // Delete Profiles

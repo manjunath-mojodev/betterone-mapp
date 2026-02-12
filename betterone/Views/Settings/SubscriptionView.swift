@@ -1,5 +1,5 @@
 import SwiftUI
-import StoreKit
+import RevenueCat
 
 struct SubscriptionView: View {
     @Environment(SubscriptionService.self) private var subscriptionService
@@ -38,7 +38,7 @@ struct SubscriptionView: View {
             .padding(.vertical, Theme.spacingSM)
 
             if !subscriptionService.isSubscribed {
-                Text("You have \(subscriptionService.freeSessionLimit) free coaching sessions. Upgrade for unlimited access.")
+                Text("Upgrade to unlock all topics and premium features.")
                     .font(Theme.captionFont)
                     .foregroundStyle(Theme.textSecondary)
             }
@@ -49,7 +49,7 @@ struct SubscriptionView: View {
 
     private var plansSection: some View {
         Section("Choose a Plan") {
-            if subscriptionService.availableProducts.isEmpty {
+            if subscriptionService.availablePackages.isEmpty {
                 VStack(spacing: Theme.spacingSM) {
                     ProgressView()
                     Text("Loading plans...")
@@ -59,8 +59,8 @@ struct SubscriptionView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Theme.spacingMD)
             } else {
-                ForEach(subscriptionService.availableProducts, id: \.id) { product in
-                    PlanRow(product: product)
+                ForEach(subscriptionService.availablePackages, id: \.identifier) { package in
+                    PlanRow(package: package)
                 }
             }
 
@@ -82,10 +82,7 @@ struct SubscriptionView: View {
 
             Button("Manage in App Store") {
                 Task {
-                    if let windowScene = UIApplication.shared.connectedScenes
-                        .compactMap({ $0 as? UIWindowScene }).first {
-                        try? await AppStore.showManageSubscriptions(in: windowScene)
-                    }
+                    try? await Purchases.shared.showManageSubscriptions()
                 }
             }
         }
@@ -108,11 +105,11 @@ struct SubscriptionView: View {
 // MARK: - Plan Row
 
 private struct PlanRow: View {
-    let product: Product
+    let package: RevenueCat.Package
     @Environment(SubscriptionService.self) private var subscriptionService
 
     private var isYearly: Bool {
-        product.id == SubscriptionService.premiumYearlyId
+        package.packageType == .annual
     }
 
     var body: some View {
@@ -130,7 +127,7 @@ private struct PlanRow: View {
                             .background(Theme.accent, in: Capsule())
                     }
                 }
-                Text(product.displayPrice + (isYearly ? "/year" : "/month"))
+                Text(package.storeProduct.localizedPriceString + (isYearly ? "/year" : "/month"))
                     .font(Theme.captionFont)
                     .foregroundStyle(Theme.textSecondary)
             }
@@ -139,7 +136,7 @@ private struct PlanRow: View {
 
             Button {
                 Task {
-                    await subscriptionService.purchase(product)
+                    await subscriptionService.purchase(package)
                 }
             } label: {
                 if subscriptionService.purchaseInProgress {

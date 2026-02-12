@@ -7,7 +7,7 @@ struct HomeView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Query(sort: \Topic.sortOrder) private var topics: [Topic]
     @Query private var sessions: [ChatSession]
-    
+
     private var notionSystems: [Topic] {
         topics.filter { topic in
             ["notion-life-os", "simplified-life-os", "client-content-os", "design-workspace"].contains(topic.slug)
@@ -33,31 +33,40 @@ struct HomeView: View {
                 HStack {
                     Text("BetterMe")
                         .font(.largeTitle.bold())
-                    
+
                     Spacer()
-                    
-                    NavigationLink(destination: SettingsView()) {
+
+                    NavigationLink(destination: FollowerSettingsView()) {
                         Image(systemName: "person.circle.fill")
-                            .font(.title2)
+                            .font(.system(size: 32))
                             .foregroundStyle(Theme.accent)
                     }
                 }
                 .padding(.horizontal, Theme.spacingLG)
                 .padding(.top, Theme.spacingSM)
-                
-                // Notion Systems Section
-                if !notionSystems.isEmpty {
-                    TopicSection(title: "Notion Systems", topics: notionSystems)
-                }
-                
-                // Productivity & Coaching Section
-                if !productivityCoaching.isEmpty {
-                    TopicSection(title: "Productivity & Coaching", topics: productivityCoaching)
-                }
 
-                // AI & Notion Mastery Section
-                if !aiNotionMastery.isEmpty {
-                    TopicSection(title: "AI & Notion Mastery", topics: aiNotionMastery)
+                if topics.isEmpty {
+                    ContentUnavailableView(
+                        "No Topics Available",
+                        systemImage: "book.closed",
+                        description: Text("Topics will appear here once they're loaded.")
+                    )
+                    .padding(.top, Theme.spacingXL)
+                } else {
+                    // Notion Systems Section
+                    if !notionSystems.isEmpty {
+                        TopicSection(title: "Notion Systems", topics: notionSystems)
+                    }
+
+                    // Productivity & Coaching Section
+                    if !productivityCoaching.isEmpty {
+                        TopicSection(title: "Productivity & Coaching", topics: productivityCoaching)
+                    }
+
+                    // AI & Notion Mastery Section
+                    if !aiNotionMastery.isEmpty {
+                        TopicSection(title: "AI & Notion Mastery", topics: aiNotionMastery)
+                    }
                 }
             }
             .padding(.bottom, 100)
@@ -70,6 +79,8 @@ struct HomeView: View {
 struct TopicSection: View {
     let title: String
     let topics: [Topic]
+    @Environment(SubscriptionService.self) private var subscriptionService
+    @State private var showPaywall = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.spacingSM) {
@@ -92,14 +103,30 @@ struct TopicSection: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Theme.spacingMD) {
                     ForEach(topics) { topic in
-                        NavigationLink(value: topic) {
-                            TopicCardView(topic: topic)
+                        if topic.isPremium && !subscriptionService.isSubscribed {
+                            Button {
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                                showPaywall = true
+                            } label: {
+                                TopicCardView(topic: topic, showPremiumLock: true)
+                            }
+                            .buttonStyle(.plain)
+                        } else {
+                            NavigationLink(value: topic) {
+                                TopicCardView(topic: topic, showPremiumBadge: topic.isPremium)
+                            }
+                            .buttonStyle(.plain)
+                            .simultaneousGesture(TapGesture().onEnded {
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            })
                         }
-                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.horizontal, Theme.spacingLG)
             }
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
         }
     }
 }
